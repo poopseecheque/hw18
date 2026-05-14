@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Athletic Analogies – Sports‑Influenced Idioms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f5f0;
+      --card: #ffffff;
+      --border: #e3dfd6;
+      --text: #222;
+      --muted: #5c5a55;
+      --red: #c0392b;
+      --teal: #1a6b5a;
+      --amber: #b07800;
+      --blue: #1a4080;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      border-bottom: 1px solid var(--border);
+      background: #f0ece4;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .topbar .unit {
+      font-family: "Syne", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: "Syne", sans-serif;
+      margin: 0 0 8px;
+      font-size: 1.4rem;
+    }
+    .sub { color: var(--muted); margin: 0 0 14px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+    .home-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fff;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .home-card:hover { transform: translateY(-2px); }
+    .badge {
+      display: inline-flex;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .badge.red { background: var(--red); }
+    .badge.blue { background: var(--blue); }
+    .badge.amber { background: var(--amber); }
+    .badge.teal { background: var(--teal); }
+    .progress-wrap { margin: 10px 0 8px; }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .progress {
+      height: 9px;
+      border-radius: 999px;
+      background: #ece7dd;
+      overflow: hidden;
+    }
+    .bar {
+      height: 100%;
+      width: 0%;
+      transition: width 0.2s ease;
+    }
+    .bar.red { background: var(--red); }
+    .bar.blue { background: var(--blue); }
+    .bar.amber { background: var(--amber); }
+    .bar.teal { background: var(--teal); }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    button {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #fff;
+    }
+    .btn-red { border-color: #e4c3bf; color: var(--red); }
+    .btn-blue { border-color: #c3cfdf; color: var(--blue); }
+    .btn-amber { border-color: #e7d8b9; color: var(--amber); }
+    .btn-teal { border-color: #b8d6cf; color: var(--teal); }
+    .word-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      line-height: 1.8;
+    }
+    .word-cloud span { padding: 2px 4px; }
+    .stories p { margin: 10px 0; }
+    .stories b { color: var(--blue); }
+    .match-item, .sort-item, .gap-item, .quiz-item, .error-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+    select, input[type="text"] {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+      margin-top: 8px;
+      font-family: inherit;
+    }
+    .score { font-weight: 700; margin-top: 8px; }
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .bank-word {
+      border: 1px solid #decfc8;
+      color: var(--red);
+      background: #fff9f8;
+      border-radius: 999px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 0.92rem;
+    }
+    .blank {
+      display: inline-block;
+      min-width: 180px;
+      border-bottom: 2px solid #9f988a;
+      padding: 1px 4px;
+      cursor: pointer;
+    }
+    .blank.active { background: #fff2ef; }
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 10px;
+    }
+    .idiom-list {
+      border: 1px dashed #d3c9b5;
+      border-radius: 12px;
+      padding: 10px;
+      background: #fffcf5;
+    }
+    .idiom-chip {
+      border: 1px solid #eadcbf;
+      border-radius: 999px;
+      display: inline-block;
+      padding: 4px 9px;
+      margin: 4px;
+      font-size: 0.9rem;
+      color: var(--amber);
+      background: #fff;
+    }
+    .speak-list li { margin-bottom: 8px; }
+    .mini { font-size: 0.9rem; color: var(--muted); }
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .result-box {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+    }
+    .review-list {
+      columns: 2;
+      margin-top: 8px;
+      padding-left: 18px;
+    }
+    @media (max-width: 800px) {
+      .columns { grid-template-columns: 1fr; }
+      .review-list { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="unit">Unit: Athletic Analogies – Sports‑Influenced Idioms</div>
+    <button onclick="go('home')">Home</button>
+  </div>
+
+  <main class="container">
+    <section id="home" class="screen active">
+      <div class="card">
+        <h1 class="section-title">Lesson Goal</h1>
+        <p class="sub">Learn 11 sports-based idioms and use them naturally in business, daily life, relationships, study, and social contexts.</p>
+        <div class="grid">
+          <div class="home-card" onclick="go('guided')"><span class="badge blue">1</span><div><b>Word clouds + Guided Discovery</b><div class="mini">Read mini-stories, notice idioms in context.</div></div></div>
+          <div class="home-card" onclick="go('match')"><span class="badge red">2</span><div><b>Match idiom → meaning</b><div class="mini">11-item matching challenge.</div></div></div>
+          <div class="home-card" onclick="go('gap')"><span class="badge red">3</span><div><b>Fill in the gap</b><div class="mini">Use full idioms from a shuffled word bank.</div></div></div>
+          <div class="home-card" onclick="go('sort')"><span class="badge amber">4</span><div><b>Sort idioms &amp; similar phrases</b><div class="mini">Column-style phrase matching.</div></div></div>
+          <div class="home-card" onclick="go('quiz')"><span class="badge red">5</span><div><b>Choose the right idiom (quiz)</b><div class="mini">Situational multiple-choice.</div></div></div>
+          <div class="home-card" onclick="go('speak')"><span class="badge teal">6</span><div><b>Speaking &amp; discussion</b><div class="mini">Prompts, debate, and vocabulary support.</div></div></div>
+          <div class="home-card" onclick="go('error')"><span class="badge red">7</span><div><b>Error correction</b><div class="mini">Fix wrongly-used idioms.</div></div></div>
+          <div class="home-card" onclick="go('results')"><span class="badge blue">8</span><div><b>Results</b><div class="mini">Score percentages and final idiom review.</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="guided" class="screen">
+      <div class="card">
+        <h2 class="section-title" style="color:var(--blue)">Word clouds + Guided Discovery</h2>
+        <p class="sub">Look at the language first. Guess from context before checking meanings.</p>
+        <h3>Cloud 1: Idioms</h3>
+        <div class="word-cloud" id="cloudIdioms"></div>
+        <h3>Cloud 2: Context words</h3>
+        <div class="word-cloud" id="cloudContext"></div>
+      </div>
+
+      <div class="card stories">
+        <h3>Small moments – read and notice</h3>
+        <p><b>Salim:</b> “The new regulations aim to create a level playing field for all companies in the industry. Finally, smaller businesses can compete fairly.”</p>
+        <p><b>Maria:</b> “I am very sorry. I dropped the ball and failed to call the customer before it was too late. Now we’ve lost the account.”</p>
+        <p><b>Tom:</b> “Our company is employing a full-court press to launch the new product successfully – extra shifts, non-stop meetings, the whole team is in.”</p>
+        <p><b>Elena:</b> “She hit a grand slam in her presentation. Everyone, from the audience to the executive, was impressed. Complete victory.”</p>
+        <p><b>James:</b> “If all else fails, we might have to resort to a Hail Mary pass and hope for a miracle. It’s our last chance.”</p>
+        <p><b>Lin:</b> “When I'm in the zone, I can finish my work in record time and produce my best results. Hours pass like minutes.”</p>
+        <p><b>Anna:</b> “He jumped the gun by announcing the project before finalizing the details. Now everyone is confused and angry.”</p>
+        <p><b>Kai:</b> “I can't believe she agreed to go out with me. I always thought she was out of my league – way too talented and attractive.”</p>
+        <p><b>Omar:</b> “If you would just play ball, we can get the assignment done on time. We need everyone to cooperate.”</p>
+        <p><b>Nina:</b> “She threw a curveball by announcing her resignation right before the most important meeting of the year. Nobody saw it coming.”</p>
+        <p><b>Paul:</b> “After struggling for years to make the business profitable, the owner finally decided to throw in the towel and close down. He just couldn’t keep going.”</p>
+        <p><b>Now test yourself – match each idiom to its meaning before moving to the exercises.</b></p>
+        <div class="btn-row"><button class="btn-blue" onclick="go('match')">Start Exercise A</button></div>
+      </div>
+    </section>
+
+    <section id="match" class="screen">
+      <div class="card">
+        <h2 class="section-title" style="color:var(--red)">Exercise A — Match idiom → meaning</h2>
+        <div class="progress-wrap"><div class="progress-label"><span>Progress</span><span id="matchProgText">0/11</span></div><div class="progress"><div id="matchBar" class="bar red"></div></div></div>
+        <div id="matchList"></div>
+        <div class="btn-row">
+          <button class="btn-red" onclick="checkMatch()">Check answers</button>
+          <button onclick="go('gap')">Next: Fill in the gap</button>
+        </div>
+        <div id="matchScore" class="score"></div>
+      </div>
+    </section>
+
+    <section id="gap" class="screen">
+      <div class="card">
+        <h2 class="section-title" style="color:var(--red)">Exercise C — Fill in the gap</h2>
+        <div class="progress-wrap"><div class="progress-label"><span>Progress</span><span id="gapProgText">0/11</span></div><div class="progress"><div id="gapBar" class="bar red"></div></div></div>
+        <p class="mini">Click a blank, then click an idiom in the word bank.</p>
+        <div id="gapList"></div>
+        <h4>Word Bank</h4>
+        <div id="wordBank" class="word-bank"></div>
+        <div class="btn-row">
+          <button class="btn-red" onclick="checkGap()">Check answers</button>
+          <button onclick="go('sort')">Next: Column sorting</button>
+        </div>
+        <div id="gapScore" class="score"></div>
+      </div>
+    </section>
+
+    <section id="sort" class="screen">
+      <div class="card">
+        <h2 class="section-title" style="color:var(--amber)">Exercise B — Sort idioms &amp; similar phrases (columns)</h2>
+        <div class="progress-wrap"><div class="progress-label"><span>Progress</span><span id="sortProgText">0/24</span></div><div class="progress"><div id="sortBar" class="bar amber"></div></div></div>
+        <div class="columns">
+          <div class="idiom-list" id="idiomColumn"></div>
+          <div id="sortList"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-amber" onclick="checkSort()">Check answers</button>
+          <button onclick="go('quiz')">Next: Right idiom quiz</button>
+        </div>
+        <div id="sortScore" class="score"></div>
+      </div>
+    </section>
+
+    <section id="quiz" class="screen">
+      <div class="card">
+        <h2 class="section-title" style="color:var(--red)">Exercise D — Choose the right idiom</h2>
+        <div class="progress-wrap"><div class="progress-label"><span>Progress</span><span id="quizProgText">0/9</span></div><div class="progress"><div id="quizBar" class="bar red"></div></div></div>
+        <div id="quizList"></div>
+        <div class="btn-row">
+          <button class="btn-red" onclick="checkQuiz()">Check answers</button>
+          <button onclick="go('speak')">Next: Speaking &amp; discussion</button>
+        </div>
+        <div id="quizScore" class="score"></div>
+      </div>
+    </section>
+
+    <section id="speak" class="screen">
+      <div class="card">
+        <h2 class="section-title" style="color:var(--teal)">Exercise E — Speaking &amp; discussion</h2>
+        <div class="progress-wrap"><div class="progress-label"><span>Progress</span><span id="speakProgText">0/13</span></div><div class="progress"><div id="speakBar" class="bar teal"></div></div></div>
+        <h3>Personal prompts</h3>
+        <ul class="speak-list" id="personalPrompts"></ul>
+        <h3>Discussion questions</h3>
+        <ul class="speak-list" id="discussionPrompts"></ul>
+        <h3>Controversial takes (Agree / Disagree / Complicate)</h3>
+        <ul class="speak-list" id="takesPrompts"></ul>
+        <p><b>Vocabulary suggestions:</b> a level playing field, drop the ball, full-court press, Hail Mary pass, in the zone, jump the gun, out of one’s league, play ball, throw a curveball, throw in the towel, grand slam.</p>
+        <div class="btn-row">
+          <button class="btn-teal" onclick="markSpeakingDone()">Mark this discussion complete</button>
+          <button onclick="go('error')">Next: Error correction</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="error" class="screen">
+      <div class="card">
+        <h2 class="section-title" style="color:var(--red)">Exercise F — Error correction</h2>
+        <div class="progress-wrap"><div class="progress-label"><span>Progress</span><span id="errorProgText">0/5</span></div><div class="progress"><div id="errorBar" class="bar red"></div></div></div>
+        <p class="mini">Each sentence uses an idiom incorrectly. Type the correct idiom.</p>
+        <div id="errorList"></div>
+        <div class="btn-row">
+          <button class="btn-red" onclick="checkErrors()">Check answers</button>
+          <button onclick="go('results'); renderResults();">Go to results</button>
+        </div>
+        <div id="errorScore" class="score"></div>
+      </div>
+    </section>
+
+    <section id="results" class="screen">
+      <div class="card">
+        <h2 class="section-title" style="color:var(--blue)">Final Results</h2>
+        <div class="result-grid" id="resultGrid"></div>
+        <h3>All 11 idioms for review</h3>
+        <ol class="review-list" id="reviewList"></ol>
+        <div class="btn-row"><button class="btn-blue" onclick="go('home')">Back to home</button></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const idioms = [
+      { idiom: "a level playing field", meaning: "A situation where everyone has the same opportunity.", example: "The new regulations aim to create a level playing field for all companies in the industry.", similar: ["fair play", "equal footing", "playing by the same rules"] },
+      { idiom: "drop the ball", meaning: "To make a mistake, fail to do something that was expected or required.", example: "I am very sorry. I dropped the ball and failed to call the customer before it was too late.", similar: ["miss the mark", "fall through the cracks"] },
+      { idiom: "full-court press", meaning: "An aggressive and intense effort or strategy applied to achieve a goal.", example: "Our company is employing a full-court press to launch the new product successfully.", similar: ["all-out effort", "bring out the big guns"] },
+      { idiom: "grand slam", meaning: "A remarkable or impressive achievement in any field.", example: "She hit a grand slam in her presentation and impressed everyone, from the audience to the executive.", similar: ["knock it out of the park", "hit the jackpot"] },
+      { idiom: "Hail Mary pass", meaning: "A desperate and unlikely attempt, often last-minute or under high pressure.", example: "If all else fails, we might have to resort to a Hail Mary pass and hope for a miracle.", similar: ["Hail Mary play", "last-ditch effort"] },
+      { idiom: "in the zone", meaning: "Being fully immersed in an activity, experiencing flow and peak performance.", example: "When I'm in the zone, I can finish my work in record time and produce my best results.", similar: ["in the groove", "firing on all cylinders"] },
+      { idiom: "jump the gun", meaning: "To act prematurely or before the appropriate time.", example: "He jumped the gun by announcing the project before finalizing the details.", similar: ["get ahead of yourself", "count your chickens before they hatch"] },
+      { idiom: "out of one’s league", meaning: "Not within one’s ability, range, or level to deal with.", example: "I can't believe she agreed to go out with me; I always thought she was out of my league.", similar: ["punch above your weight", "not in the same ballpark", "over your head"] },
+      { idiom: "play ball", meaning: "An instruction to begin; to cooperate or do your part.", example: "If you would just play ball, we can get the assignment done on time.", similar: ["get the show on the road", "do your bit"] },
+      { idiom: "throw a curveball", meaning: "To surprise someone with a difficult, unexpected, or deceptive problem or action.", example: "She threw a curveball by announcing her resignation right before the most important meeting of the year.", similar: ["pull a fast one", "catch off guard"] },
+      { idiom: "throw in the towel", meaning: "To stop trying, to give up due to lack of success or progress.", example: "After struggling for years to make the business profitable, the owner finally decided to throw in the towel and close down.", similar: ["call it quits", "throw in the sponge"] }
+    ];
+
+    const contextWords = ["fairness", "mistake", "pressure", "focus", "surprise", "success", "cooperation", "failure", "equality", "urgency", "unexpected", "surrender", "partnership"];
+
+    const fillItems = [
+      { text: "The startup launched a ___ campaign to recover market share before the quarter ended.", answer: "full-court press" },
+      { text: "I really ___ when I forgot to submit the visa papers on time.", answer: "dropped the ball" },
+      { text: "During finals week, I was ___ and wrote 20 pages in two days.", answer: "in the zone" },
+      { text: "He ___ by posting engagement photos before they told their families.", answer: "jumped the gun" },
+      { text: "The underdog team needed a ___ in the last 10 seconds.", answer: "Hail Mary pass" },
+      { text: "The scholarship policy creates ___ for students from different backgrounds.", answer: "a level playing field" },
+      { text: "When the negotiations became fair, both sides agreed to ___ and sign the deal.", answer: "play ball" },
+      { text: "The minister ___ by announcing a surprise tax right before elections.", answer: "threw a curveball" },
+      { text: "After three years of trying to revive the café, the owners decided to ___.", answer: "throw in the towel" },
+      { text: "Winning gold and breaking a record in one day was a complete ___.", answer: "grand slam" },
+      { text: "At first I felt the coding competition was ___, but training helped.", answer: "out of one’s league" }
+    ];
+
+    const quizItems = [
+      { q: "You announce exam results before the teacher checks all papers. Which idiom fits?", options: ["jump the gun", "play ball", "in the zone"], a: "jump the gun", e: "You acted too early, before the proper moment." },
+      { q: "Your friend suddenly cancels your wedding role one day before the event. This is...", options: ["a level playing field", "throw a curveball", "grand slam"], a: "throw a curveball", e: "It is an unexpected, difficult surprise." },
+      { q: "A team works day and night with full energy to save a failing project.", options: ["full-court press", "throw in the towel", "out of one’s league"], a: "full-court press", e: "This describes aggressive all-out effort." },
+      { q: "You and your classmate both get the same resources and rules in a contest.", options: ["a level playing field", "drop the ball", "Hail Mary pass"], a: "a level playing field", e: "Everyone has equal opportunity." },
+      { q: "After months of therapy and support, he finally gave up trying to fix the relationship.", options: ["play ball", "throw in the towel", "in the zone"], a: "throw in the towel", e: "He stopped trying due to lack of progress." },
+      { q: "During the piano recital, she felt perfect focus and played flawlessly.", options: ["in the zone", "drop the ball", "out of one’s league"], a: "in the zone", e: "She was in flow and peak performance mode." },
+      { q: "You forget to pick up your friend at the airport after promising to do it.", options: ["drop the ball", "grand slam", "play ball"], a: "drop the ball", e: "You failed to do what was expected." },
+      { q: "A junior employee delivers such an outstanding pitch that investors applaud for five minutes.", options: ["Hail Mary pass", "grand slam", "jump the gun"], a: "grand slam", e: "This is a remarkable achievement." },
+      { q: "He felt nervous dating a famous actor because he believed she was too far above him.", options: ["out of one’s league", "play ball", "full-court press"], a: "out of one’s league", e: "He believed she was beyond his social/romantic level." }
+    ];
+
+    const errorItems = [
+      { s: "We needed everyone to throw in the towel so the project could finish early.", a: "play ball" },
+      { s: "After practicing daily for months, she was out of her league and unstoppable.", a: "in the zone" },
+      { s: "The company created a Hail Mary pass by giving equal rules to all suppliers.", a: "a level playing field" },
+      { s: "He hit a curveball by winning every single award that year.", a: "grand slam" },
+      { s: "When the final whistle blew, they dropped the ball and never gave up.", a: "throw in the towel" }
+    ];
+
+    const speaking = {
+      personal: [
+        "Describe a time you dropped the ball. What happened?",
+        "Tell me about a moment you were completely in the zone.",
+        "Have you ever made a Hail Mary pass attempt? Did it work?",
+        "Do you prefer a full-court press or a slow, careful strategy?",
+        "Talk about a time you threw in the towel – or refused to."
+      ],
+      discussion: [
+        "Is a level playing field possible in business? In education? In dating?",
+        "When is it smart to jump the gun, and when is it just a mistake?",
+        "Have you ever felt out of your league in a job, hobby, or social group?",
+        "What’s more valuable: the ability to throw a curveball or handle one?"
+      ],
+      takes: [
+        "“If you drop the ball at work, you don’t deserve a second chance.”",
+        "“Throwing in the towel is not failure – it’s knowing when to stop.”",
+        "“In most situations, there is no level playing field. People who say otherwise are naive.”",
+        "“Playing ball with others usually means sacrificing your own goals.”"
+      ]
+    };
+
+    const scores = { match: null, gap: null, sort: null, quiz: null, error: null };
+
+    const shuffled = (arr) => [...arr].sort(() => Math.random() - 0.5);
+
+    function go(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      if (id === 'results') renderResults();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setProgress(prefix, done, total) {
+      document.getElementById(prefix + 'ProgText').textContent = `${done}/${total}`;
+      document.getElementById(prefix + 'Bar').style.width = `${(done / total) * 100}%`;
+    }
+
+    function renderClouds() {
+      const ci = document.getElementById('cloudIdioms');
+      idioms.forEach((x, i) => {
+        const s = document.createElement('span');
+        s.textContent = x.idiom;
+        s.style.fontSize = `${0.9 + (i % 4) * 0.22}rem`;
+        s.style.opacity = `${0.55 + (i % 5) * 0.1}`;
+        s.style.color = 'var(--blue)';
+        ci.appendChild(s);
+      });
+      const cc = document.getElementById('cloudContext');
+      contextWords.forEach((w, i) => {
+        const s = document.createElement('span');
+        s.textContent = w;
+        s.style.fontSize = `${0.95 + (i % 3) * 0.25}rem`;
+        s.style.opacity = `${0.6 + (i % 4) * 0.1}`;
+        s.style.color = i % 2 ? 'var(--teal)' : 'var(--amber)';
+        cc.appendChild(s);
+      });
+    }
+
+    function renderMatch() {
+      const meanings = shuffled(idioms.map(i => i.meaning));
+      const wrap = document.getElementById('matchList');
+      wrap.innerHTML = '';
+      idioms.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'match-item';
+        div.innerHTML = `<b>${idx + 1}. ${item.idiom}</b><select data-answer="${item.meaning}" class="match-select"><option value="">Choose meaning...</option>${meanings.map(m => `<option>${m}</option>`).join('')}</select>`;
+        wrap.appendChild(div);
+      });
+      wrap.addEventListener('change', updateMatchProgress);
+      updateMatchProgress();
+    }
+
+    function updateMatchProgress() {
+      const sels = [...document.querySelectorAll('.match-select')];
+      setProgress('match', sels.filter(s => s.value).length, sels.length);
+    }
+
+    function checkMatch() {
+      const sels = [...document.querySelectorAll('.match-select')];
+      const ok = sels.filter(s => s.value === s.dataset.answer).length;
+      const total = sels.length;
+      const pct = Math.round((ok / total) * 100);
+      scores.match = pct;
+      document.getElementById('matchScore').textContent = `Score: ${ok}/${total} (${pct}%)`;
+    }
+
+    let activeBlank = null;
+    function renderGap() {
+      const gl = document.getElementById('gapList');
+      gl.innerHTML = '';
+      fillItems.forEach((it, i) => {
+        const d = document.createElement('div');
+        d.className = 'gap-item';
+        d.innerHTML = `${i + 1}. ${it.text.replace('___', `<span class="blank" data-i="${i}" data-answer="${it.answer}">______</span>`)}`;
+        gl.appendChild(d);
+      });
+      gl.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('blank')) return;
+        document.querySelectorAll('.blank').forEach(b => b.classList.remove('active'));
+        activeBlank = e.target;
+        activeBlank.classList.add('active');
+      });
+
+      const wb = document.getElementById('wordBank');
+      wb.innerHTML = '';
+      shuffled(idioms.map(i => i.idiom)).forEach(word => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'bank-word';
+        b.textContent = word;
+        b.onclick = () => {
+          if (!activeBlank) return;
+          activeBlank.textContent = word;
+          activeBlank.dataset.value = word;
+          activeBlank.classList.remove('active');
+          activeBlank = null;
+          updateGapProgress();
+        };
+        wb.appendChild(b);
+      });
+      updateGapProgress();
+    }
+
+    function updateGapProgress() {
+      const blanks = [...document.querySelectorAll('.blank')];
+      setProgress('gap', blanks.filter(b => b.dataset.value).length, blanks.length);
+    }
+
+    function checkGap() {
+      const blanks = [...document.querySelectorAll('.blank')];
+      const ok = blanks.filter(b => b.dataset.value === b.dataset.answer).length;
+      const total = blanks.length;
+      const pct = Math.round((ok / total) * 100);
+      scores.gap = pct;
+      document.getElementById('gapScore').textContent = `Score: ${ok}/${total} (${pct}%)`;
+    }
+
+    function renderSort() {
+      const idiomColumn = document.getElementById('idiomColumn');
+      idiomColumn.innerHTML = '<b>Idioms</b><br>' + shuffled(idioms.map(i => `<span class="idiom-chip">${i.idiom}</span>`)).join(' ');
+
+      const pairs = [];
+      idioms.forEach(i => i.similar.forEach(p => pairs.push({ phrase: p, idiom: i.idiom })));
+      const sl = document.getElementById('sortList');
+      sl.innerHTML = '';
+      shuffled(pairs).forEach((pair, i) => {
+        const div = document.createElement('div');
+        div.className = 'sort-item';
+        div.innerHTML = `<b>${i + 1}. ${pair.phrase}</b><select class="sort-select" data-answer="${pair.idiom}"><option value="">Match to idiom...</option>${idioms.map(x => `<option>${x.idiom}</option>`).join('')}</select>`;
+        sl.appendChild(div);
+      });
+      sl.addEventListener('change', updateSortProgress);
+      updateSortProgress();
+    }
+
+    function updateSortProgress() {
+      const sels = [...document.querySelectorAll('.sort-select')];
+      setProgress('sort', sels.filter(s => s.value).length, sels.length);
+    }
+
+    function checkSort() {
+      const sels = [...document.querySelectorAll('.sort-select')];
+      const ok = sels.filter(s => s.value === s.dataset.answer).length;
+      const total = sels.length;
+      const pct = Math.round((ok / total) * 100);
+      scores.sort = pct;
+      document.getElementById('sortScore').textContent = `Score: ${ok}/${total} (${pct}%)`;
+    }
+
+    function renderQuiz() {
+      const ql = document.getElementById('quizList');
+      ql.innerHTML = '';
+      quizItems.forEach((q, idx) => {
+        const div = document.createElement('div');
+        div.className = 'quiz-item';
+        div.innerHTML = `<div><b>${idx + 1}. ${q.q}</b></div>` + q.options.map((o, i) => `<label style="display:block;margin-top:7px"><input type="radio" name="q${idx}" value="${o}"> ${String.fromCharCode(65+i)}. ${o}</label>`).join('') + `<div class="mini" id="exp${idx}" style="margin-top:8px"></div>`;
+        ql.appendChild(div);
+      });
+      ql.addEventListener('change', updateQuizProgress);
+      updateQuizProgress();
+    }
+
+    function updateQuizProgress() {
+      const done = quizItems.filter((_, i) => document.querySelector(`input[name=q${i}]:checked`)).length;
+      setProgress('quiz', done, quizItems.length);
+    }
+
+    function checkQuiz() {
+      let ok = 0;
+      quizItems.forEach((q, i) => {
+        const pick = document.querySelector(`input[name=q${i}]:checked`);
+        if (pick && pick.value === q.a) ok++;
+        document.getElementById(`exp${i}`).textContent = `Explanation: ${q.e}`;
+      });
+      const pct = Math.round((ok / quizItems.length) * 100);
+      scores.quiz = pct;
+      document.getElementById('quizScore').textContent = `Score: ${ok}/${quizItems.length} (${pct}%)`;
+    }
+
+    function renderSpeaking() {
+      const buildList = (id, arr) => {
+        const el = document.getElementById(id);
+        el.innerHTML = '';
+        arr.forEach((t, i) => {
+          const li = document.createElement('li');
+          li.innerHTML = `<label><input type="checkbox" class="speak-check"> ${t}</label>`;
+          el.appendChild(li);
+        });
+      };
+      buildList('personalPrompts', speaking.personal);
+      buildList('discussionPrompts', speaking.discussion);
+      buildList('takesPrompts', speaking.takes);
+      document.getElementById('speak').addEventListener('change', updateSpeakingProgress);
+      updateSpeakingProgress();
+    }
+
+    function updateSpeakingProgress() {
+      const checks = [...document.querySelectorAll('.speak-check')];
+      setProgress('speak', checks.filter(c => c.checked).length, checks.length);
+    }
+
+    function markSpeakingDone() {
+      document.querySelectorAll('.speak-check').forEach(c => c.checked = true);
+      updateSpeakingProgress();
+    }
+
+    function renderErrors() {
+      const wrap = document.getElementById('errorList');
+      wrap.innerHTML = '';
+      errorItems.forEach((it, i) => {
+        const d = document.createElement('div');
+        d.className = 'error-item';
+        d.innerHTML = `<div><b>${i + 1}.</b> ${it.s}</div><input type="text" class="error-input" data-answer="${it.a}" placeholder="Type correct idiom">`;
+        wrap.appendChild(d);
+      });
+      wrap.addEventListener('input', updateErrorProgress);
+      updateErrorProgress();
+    }
+
+    function updateErrorProgress() {
+      const ins = [...document.querySelectorAll('.error-input')];
+      setProgress('error', ins.filter(i => i.value.trim()).length, ins.length);
+    }
+
+    function checkErrors() {
+      const ins = [...document.querySelectorAll('.error-input')];
+      const ok = ins.filter(i => i.value.trim().toLowerCase() === i.dataset.answer.toLowerCase()).length;
+      const pct = Math.round((ok / ins.length) * 100);
+      scores.error = pct;
+      document.getElementById('errorScore').textContent = `Score: ${ok}/${ins.length} (${pct}%)`;
+    }
+
+    function renderResults() {
+      const metrics = [
+        ['Match meaning', scores.match],
+        ['Fill in the gap', scores.gap],
+        ['Column sorting', scores.sort],
+        ['Right idiom quiz', scores.quiz],
+        ['Error correction', scores.error]
+      ];
+      const rg = document.getElementById('resultGrid');
+      rg.innerHTML = '';
+      metrics.forEach(([name, val]) => {
+        const d = document.createElement('div');
+        d.className = 'result-box';
+        d.innerHTML = `<b>${name}</b><div>${val === null ? 'Not graded yet' : val + '%'}</div>`;
+        rg.appendChild(d);
+      });
+      const valid = metrics.map(m => m[1]).filter(v => typeof v === 'number');
+      const avg = valid.length ? Math.round(valid.reduce((a,b) => a+b, 0) / valid.length) : 0;
+      const avgBox = document.createElement('div');
+      avgBox.className = 'result-box';
+      avgBox.innerHTML = `<b>Total average</b><div>${avg}%</div>`;
+      rg.appendChild(avgBox);
+
+      const rl = document.getElementById('reviewList');
+      rl.innerHTML = '';
+      idioms.forEach(i => {
+        const li = document.createElement('li');
+        li.textContent = `${i.idiom} — ${i.meaning}`;
+        rl.appendChild(li);
+      });
+    }
+
+    renderClouds();
+    renderMatch();
+    renderGap();
+    renderSort();
+    renderQuiz();
+    renderSpeaking();
+    renderErrors();
+    renderResults();
+  </script>
+</body>
+</html>
