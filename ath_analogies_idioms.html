@@ -347,7 +347,7 @@
         <h2 style="color:var(--amber)">Exercise B – Sort idioms into columns (similar phrases)</h2>
         <div class="progress-wrap">
           <div class="progress"><span id="sortProgress" style="background:var(--amber)"></span></div>
-          <div class="progress-label" id="sortLabel">0/24 phrases correctly grouped</div>
+          <div class="progress-label" id="sortLabel">0/0 phrases correctly grouped</div>
         </div>
         <p>Click an idiom on the left, then click phrases on the right to assign them to that idiom's column.</p>
         <div class="sort-layout">
@@ -980,7 +980,7 @@
       const metrics = document.getElementById('metrics');
       const pMatch = Math.round((scores.match / 11) * 100);
       const pFill = Math.round((scores.fill / 11) * 100);
-      const pSort = Math.round((scores.sort / 24) * 100);
+      const pSort = Math.round((scores.sort / totalSimilarPhrases()) * 100);
       const pQuiz = Math.round((scores.quiz / 10) * 100);
       const pError = Math.round((scores.error / 5) * 100);
       const avg = Math.round((pMatch + pFill + pSort + pQuiz + pError) / 5);
