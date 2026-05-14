@@ -830,7 +830,7 @@
       renderBucket();
       renderPhraseState();
       document.getElementById('sortFeedback').textContent = '';
-      updateSortProgress(24);
+      updateSortProgress(totalSimilarPhrases());
     }
 
     function findAssignedIdiom(phrase) {
@@ -867,7 +867,11 @@
       document.getElementById('sortFeedback').textContent = `You grouped ${correct} out of ${total} phrases correctly.`;
     }
 
-    function updateSortProgress(total = 24) {
+    function totalSimilarPhrases() {
+      return idioms.reduce((acc, i) => acc + i.similar.length, 0);
+    }
+
+    function updateSortProgress(total = totalSimilarPhrases()) {
       document.getElementById('sortProgress').style.width = `${(scores.sort / total) * 100}%`;
       document.getElementById('sortLabel').textContent = `${scores.sort}/${total} phrases correctly grouped`;
     }
